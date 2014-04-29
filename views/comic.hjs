@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>{{ manga_name }}</title>
+    <!--
+    <link rel="stylesheet" href="/stylesheets/main.css" />
+    -->
+    <style>
+        body{
+        }
+        .main{
+            text-align:center;
+            color:#FF0000;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>{{Manga Name}}</h1>
+    </header>
+    <section class="main">
+        <section>
+            <a href="#">上一页</a>
+            <select>
+                {{#pageOptions}}
+                    {{#current}}
+                        <option selected>{{page}}</option>
+                    {{/current}}
+                    {{^current}}
+                        <option>{{page}}</option>
+                    {{/current}}
+                {{/pageOptions}}
+            </select>   
+            <a href="#">下一页</a>
+            <button>Model</button>
+        </section>
+        <section class="content">
+            <img src="http://mc.acgset.com/{{filePath}}" />
+        </section>
+        <section>
+            <a href="#">上一页</a>
+            <select>
+                {{ optionHTML }}
+            </select>
+            <a href="#">下一页</a>
+            <button>Model</button>
+        </section>
+    </section>
+</body>
+</html>
