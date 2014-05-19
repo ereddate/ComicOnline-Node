@@ -56,9 +56,30 @@ function formatResponseData(data, currentPage) {
         if (i + 1 == currentPage) option.current = true;
         optionList.push(option);
     }
+    data.currentPage = currentPage;
     data.pageOptions = optionList
     data.filePath = 'comic-' + data.ID + '/' + data.prefix_name + polishingPage(currentPage) + '.png';
+    getNextPage(currentPage, data);
+    getPrevioousPage(currentPage, data);
     return data;
+}
+
+function getNextPage(currentPage, data) {
+    console.log("getNextPage currentPage: " + currentPage);
+    data.hasNextPage = false;
+    if (currentPage < data.total_page) {
+        data.hasNextPage = true;
+        data.nextPage = Number(currentPage) + 1;
+    }
+}
+
+function getPrevioousPage(currentPage, data) {
+    console.log("getPrevioousPage currentPage: " + currentPage);
+    data.hasPreviousPage = false;
+    if (currentPage > 1) {
+        data.hasPreviousPage = true;
+        data.previousPage = Number(currentPage) - 1;
+    }
 }
 
 function saveStaticFile(comicID, page, content) {
@@ -82,10 +103,11 @@ function response404(res) {
 }
 
 function polishingPage(page) {
-    var length = String(page).length;
+    var length = 4 - String(page).length;
     while(--length) {
         page = "0" + page;
     }
+    console.log('polishingPage');
     console.log(page);
     return page;
 }

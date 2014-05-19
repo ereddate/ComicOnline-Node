@@ -2,26 +2,23 @@
 <html>
 <head>
     <title>{{ manga_name }}</title>
-    <!--
     <link rel="stylesheet" href="/stylesheets/main.css" />
-    -->
-    <style>
-        body{
-        }
-        .main{
-            text-align:center;
-            color:#FF0000;
-        }
-    </style>
+    <script src="http://libs.baidu.com/jquery/1.10.2/jquery.min.js"></script>
 </head>
 <body>
-    <header>
-        <h1>{{Manga Name}}</h1>
-    </header>
     <section class="main">
+        <header>
+            <h1>{{manga_name}}</h1>
+        </header>
+        <!-- top button space -->
         <section>
-            <a href="#">上一页</a>
-            <select>
+            {{#hasPreviousPage}}
+                <a href="/manga/{{ID}}/{{previousPage}}">上一页</a>
+            {{/hasPreviousPage}}
+            {{^hasPreviousPage}}
+                <span class="start-word">这里是第一页哦</span>
+            {{/hasPreviousPage}}
+            <select class="page-selector">
                 {{#pageOptions}}
                     {{#current}}
                         <option selected>{{page}}</option>
@@ -30,21 +27,24 @@
                         <option>{{page}}</option>
                     {{/current}}
                 {{/pageOptions}}
-            </select>   
-            <a href="#">下一页</a>
-            <button>Model</button>
-        </section>
-        <section class="content">
-            <img src="http://mc.acgset.com/{{filePath}}" />
-        </section>
-        <section>
-            <a href="#">上一页</a>
-            <select>
-                {{ optionHTML }}
             </select>
-            <a href="#">下一页</a>
-            <button>Model</button>
+            {{#hasNextPage}}
+                <a href="/manga/{{ID}}/{{nextPage}}">下一页</a>
+            {{/hasNextPage}}
+            {{^hasNextPage}}
+                <span class="end-word">已经插到底了...</span>
+            {{/hasNextPage}}
         </section>
+        <!-- top button space end -->
+        <section class="content">
+            <img id="manga" src="http://mc.acgset.com/{{filePath}}" />
+        </section>
+        <!-- bottom button space -->
+        <!-- bottom button space end -->
     </section>
+    <script src="/javascripts/main.js"></script>
+    <script>
+        hentai.initialize({{ID}}, {{currentPage}}, {{total_page}}, {{hasNextPage}}, {{hasPreviousPage}});
+    </script>
 </body>
 </html>
