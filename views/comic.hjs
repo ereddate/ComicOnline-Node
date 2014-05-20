@@ -2,6 +2,7 @@
 <html>
 <head>
     <title>{{ manga_name }}</title>
+    <link rel="stylesheet" type="text/css" href="http://yui.yahooapis.com/3.16.0/build/cssreset/cssreset-min.css">
     <link rel="stylesheet" href="/stylesheets/main.css" />
     <script src="http://libs.baidu.com/jquery/1.10.2/jquery.min.js"></script>
 </head>
@@ -11,7 +12,7 @@
             <h1>{{manga_name}}</h1>
         </header>
         <!-- top button space -->
-        <section>
+        <section class="control">
             {{#hasPreviousPage}}
                 <a href="/manga/{{ID}}/{{previousPage}}">上一页</a>
             {{/hasPreviousPage}}
@@ -40,6 +41,30 @@
             <img id="manga" src="http://mc.acgset.com/{{filePath}}" />
         </section>
         <!-- bottom button space -->
+        <section class="control">
+            {{#hasPreviousPage}}
+                <a href="/manga/{{ID}}/{{previousPage}}">上一页</a>
+            {{/hasPreviousPage}}
+            {{^hasPreviousPage}}
+                <span class="start-word">这里是第一页哦</span>
+            {{/hasPreviousPage}}
+            <select class="page-selector">
+                {{#pageOptions}}
+                    {{#current}}
+                        <option selected>{{page}}</option>
+                    {{/current}}
+                    {{^current}}
+                        <option>{{page}}</option>
+                    {{/current}}
+                {{/pageOptions}}
+            </select>
+            {{#hasNextPage}}
+                <a href="/manga/{{ID}}/{{nextPage}}">下一页</a>
+            {{/hasNextPage}}
+            {{^hasNextPage}}
+                <span class="end-word">已经插到底了...</span>
+            {{/hasNextPage}}
+        </section>
         <!-- bottom button space end -->
     </section>
     <script src="/javascripts/main.js"></script>

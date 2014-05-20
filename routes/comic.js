@@ -3,6 +3,9 @@ var router = express.Router();
 var basePath = './comic/';
 var staticFilePrefix = 'comic-';
 
+var MangaStaticFile = require('../utils/mangaStaticFile');
+var ms = new MangaStaticFile();
+
 //{id:1, comic_name:'ddd', total_page:99, prefix:'xxx'}
 
 router.get('/:comic_id/:page', function(req, res){
@@ -13,11 +16,10 @@ router.get('/:comic_id/:page', function(req, res){
         response404(res);
     }
     // 1. check catch for static file
-    var fs = require('fs');
-    var filePath = basePath + 'comic-' + comicID + '/' + staticFilePrefix + comicID + '-' + page + '.html';
-    if (fs.existsSync(filePath)) {
-        console.log('file is exists!!');
-        res.send(fs.readFileSync(filePath));
+    if (ms.exists(page, comicID)) {
+        ms.readFile(page, comicID, function(html){
+            res.send(html);
+        });
         return;
     }
     // 2. query database
@@ -26,7 +28,6 @@ router.get('/:comic_id/:page', function(req, res){
     db.initialize();
     db.signal().once('query_success', function(rows) {
         var mangaData = rows[0];
-        console.log(rows);
         // 3. check totalPage
         if (page > mangaData.total_page) {
             response404(res);
@@ -34,7 +35,7 @@ router.get('/:comic_id/:page', function(req, res){
         }
         // 4. render html
         res.render('comic', formatResponseData(mangaData, page), function(err, html){
-            saveStaticFile(comicID, page, html);
+            ms.writeFile(page, comicID, html);
             res.send(html);
         });
     });
@@ -47,7 +48,6 @@ router.get('/:comic_id/:page', function(req, res){
 function formatResponseData(data, currentPage) {
     var optionList = [];
     var totalPage = data.total_page;
-//    currentPage = 3;
     var option;
     for(var i = 0; i < totalPage; i++) {
         option = {
@@ -82,22 +82,6 @@ function getPrevioousPage(currentPage, data) {
     }
 }
 
-function saveStaticFile(comicID, page, content) {
-    var folderPath = basePath + 'comic-' + comicID + '/';
-    var fileName = staticFilePrefix + comicID + '-' + page + '.html';
-    var fs = require('fs');
-    if (!fs.existsSync(folderPath)) {
-        fs.mkdirSync(folderPath);
-    }
-    fs.writeFile(folderPath + fileName, content, function(err){
-        if (err) {
-            console.log(err);
-            return;
-        }
-        console.log('save file success');
-    });
-}
-
 function response404(res) {
     res.render('404');
 }
@@ -107,8 +91,6 @@ function polishingPage(page) {
     while(--length) {
         page = "0" + page;
     }
-    console.log('polishingPage');
-    console.log(page);
     return page;
 }
 

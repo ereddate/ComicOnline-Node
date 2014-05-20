@@ -1,11 +1,21 @@
+body{
+    font-size:100%;
+}
 .main {
     text-align:center;
+}
+h1{
+    font-size: 1.8em;
+    font-weight:bold;
+    margin: 10px 0;
+}
+.control{
+    margin: 10px;
 }
 .content img {
     border:1px solid #CCCCCC;
     border-radius: 4px;
 }
-.start-word{
-}
-.end-word{
+.start-word, .end-word{
+    font-weight: bold;
 }

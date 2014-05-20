@@ -42,6 +42,21 @@ function DB() {
             _signal.emit('query_success', rows);
         });  
     };
+    //
+    this.randomManga = function () {
+        connection.query('select top 1 * from manga order by newid()', function(err, rows){
+            if (err) {
+                console.info(err);
+                _signal.emit('query_error');
+                return;
+            }
+            if (rows.length == 0) {
+                _signal.emit('query_empty');
+                return;
+            }
+            _signal.emit('query_success', rows); 
+        });
+    }
 }
 
 module.exports = DB;
